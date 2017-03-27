@@ -1,5 +1,5 @@
 configurator = lambda do |mailer_klass, env_name, non_prod_default|
-  url_value = Rails.env.production? ? ENV.fetch(env_name) : non_prod_default
+  url_value = Rails.env.production? ? ENV.fetch(env_name, 'http://localhost:4000') : non_prod_default
 
   service_url = URI.parse(url_value)
 

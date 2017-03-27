@@ -1,5 +1,5 @@
 public_service_url = if Rails.env.production?
-                       ENV.fetch('PUBLIC_SERVICE_URL')
+                       ENV.fetch('PUBLIC_SERVICE_URL', 'http://localhost:4000')
                      else
                        'http://localhost:4000'
                      end

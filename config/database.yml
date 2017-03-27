@@ -80,6 +80,4 @@ test:
 #
 production:
   <<: *default
-  database: pvb2_production
-  username: pvb2
-  password: <%= ENV['PVB2_DATABASE_PASSWORD'] %>
+  database: pvb2_development

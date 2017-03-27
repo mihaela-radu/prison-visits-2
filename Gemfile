@@ -48,6 +48,7 @@ gem 'pvb-instrumentation',
 # gem 'pvb-instrumentation', path: '../pvb-instrumentation'
 
 group :development, :test do
+  gem 'derailed'
   gem 'brakeman'
   gem 'byebug'
   gem 'jasmine-jquery-rails'
