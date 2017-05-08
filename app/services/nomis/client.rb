@@ -27,9 +27,9 @@ module Nomis
       request(:get, route, params, idempotent: true)
     end
 
-  # def post(route, params)
-  #   request(:post, route, params)
-  # end
+    def post(route, params)
+      request(:post, route, params)
+    end
 
   private
 
@@ -44,7 +44,7 @@ module Nomis
       options = {
         method: method,
         path: path,
-        expects: [200],
+        expects: http_method_expects(method),
         idempotent: idempotent,
         deadline: RequestStore.store[:deadline],
         retry_limit: 2,
@@ -80,17 +80,26 @@ module Nomis
     # rubocop:enable Metrics/MethodLength
     # rubocop:enable Metrics/AbcSize
 
+    def http_method_expects(method)
+      if method == :get
+        [200]
+      else
+        # TODO: Add 409 when idempotency key is ready
+        [200, 422]
+      end
+    end
+
     # Returns excon options which put params in either the query string or body.
     def params_options(method, params)
       return {} if params.empty?
 
       if method == :get || method == :delete
         { query: params }
-        # else
-        #   {
-        #     body: params.to_json,
-        #     headers: { 'Content-Type' => 'application/json' }
-        #   }
+      else
+        {
+          body: params.to_json,
+          headers: { 'Content-Type' => 'application/json' }
+        }
       end
     end
 
