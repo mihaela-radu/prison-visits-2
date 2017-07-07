@@ -91,6 +91,41 @@ RSpec.feature 'Processing a request - Acceptance with the contact list enabled',
       expect(vst).to be_booked
       expect(vst.nomis_id).to be_nil
     end
+
+    context 'prisoner running out of vo while staff processes' do
+      before do
+        # First page load shows the date as available
+        visit prison_visit_path(vst, locale: 'en')
+
+        expect(page).to have_css('.choose-date', text: 'Prisoner available')
+
+        choose_date
+
+        within "#visitor_#{visitor.id}" do
+          select 'IRMA ITSU - 03/04/1975', from: 'Match to contact list'
+        end
+
+        click_button 'Process'
+      end
+
+      # During processing the prisoner runs out of VO
+      scenario 'deciding to override no vo to book visit', vcr: { cassette_name: 'book_with_override_vo' } do
+        expect(page).to have_css('.choose-date', text: 'No visiting allowance')
+        choose_date
+
+        expect(page).to have_css('.choose-date', text: 'Warning - Visit will go over the prisoner allowance')
+
+        within "#visitor_#{visitor.id}" do
+          select 'IRMA ITSU - 03/04/1975', from: 'Match to contact list'
+        end
+
+        click_button 'Process'
+
+        vst.reload
+        expect(vst).to be_booked
+        expect(vst.nomis_id).to eq(5493)
+      end
+    end
   end
 
   context 'without book to nomis enabled' do
