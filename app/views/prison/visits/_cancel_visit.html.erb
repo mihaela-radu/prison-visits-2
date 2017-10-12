@@ -1,24 +1,22 @@
-<%= form_tag cancel_prison_visit_path(@visit, locale: 'en'), class: 'form' do -%>
+<%= form_for [:prison, @visit, @visit.cancellation], class: 'form' do |f| -%>
+  <%= f.hidden_field :nomis_cancelled, values: true %>
   <h3 class="heading-medium"><%= t(".title") %></h3>
 
   <div class="grid-row">
     <fieldset>
-      <div class="column-one-half">
-        <% %i[prisoner_vos prisoner_released child_protection_issues slot_unavailable visitor_banned].each do |reason| %>
-          <div class="multiple-choice">
-            <%= check_box_tag 'cancellation_reasons[]', reason, false, id: reason %>
-            <%= label_tag reason, t(".#{reason}") %>
+      <%= error_container(f, :reasons, class: 'form-group form-group-error') do %>
+        <% f.object.staff_cancellation_reasons.in_groups_of(5, false).each do |reasons| %>
+          <div class="column-one-half">
+            <%= f.collection_check_boxes :reasons, reasons, :id, :label, include_hidden: false do |b| %>
+              <div class="multiple-choice">
+                <%= b.check_box %>
+                <%= b.label %>
+              </div>
+            <% end %>
           </div>
         <% end %>
-      </div>
-      <div class="column-one-half">
-        <% %i[prisoner_moved prisoner_non_association prisoner_cancelled booked_in_error capacity_issues].each do |reason| %>
-          <div class="multiple-choice">
-            <%= check_box_tag 'cancellation_reasons[]', reason, false, id: reason %>
-            <%= label_tag reason, t(".#{reason}") %>
-          </div>
-        <% end %>
-      </div>
+      <% end %>
+
     </fieldset>
   </div>
   <div class='form-group push-top'>

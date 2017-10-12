@@ -42,6 +42,18 @@ RSpec.describe Cancellation, model: true do
           it { is_expected.to be_valid }
         end
       end
+
+      describe 'witout a reason' do
+        before do
+          subject.reasons.clear
+          is_expected.to be_invalid
+        end
+
+        it 'has a meaning full transalated message' do
+          errors = subject.errors[:reasons]
+          expect(errors).to eq(['Please provide a cancellation reason'])
+        end
+      end
     end
   end
 end
