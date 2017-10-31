@@ -8,19 +8,6 @@ class CancelNomisVisit
   ADMIN   = 'ADMIN'.freeze
   OFFCANC = 'OFFCANC'.freeze
 
-  CANCELLATION_REASONS_TO_NOMIS_CODE_MAP = {
-    Cancellation::PRISONER_VOS             => NO_VO,
-    Cancellation::PRISONER_RELEASED        => ADMIN,
-    Cancellation::CHILD_PROTECTION_ISSUES  => ADMIN,
-    Cancellation::SLOT_UNAVAILABLE         => ADMIN,
-    Cancellation::VISITOR_BANNED           => ADMIN,
-    Cancellation::PRISONER_MOVED           => ADMIN,
-    Cancellation::PRISONER_NON_ASSOCIATION => ADMIN,
-    Cancellation::PRISONER_CANCELLED       => OFFCANC,
-    Cancellation::BOOKED_IN_ERROR          => ADMIN,
-    Cancellation::CAPACITY_ISSUES          => ADMIN
-  }
-
   def initialize(visit)
     self.visit     = visit
     self.api_error = false
