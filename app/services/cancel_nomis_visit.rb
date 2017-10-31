@@ -27,8 +27,7 @@ class CancelNomisVisit
   end
 
   def execute(params = {})
-    reason = visit.cancellation.reasons.first
-    params[:cancellation_code] = CANCELLATION_REASONS_TO_NOMIS_CODE_MAP[reason]
+    params[:cancellation_code] = cancellation_code
     call_api(params)
     build_booking_response
   end
@@ -78,5 +77,19 @@ private
 
   def invalid_cancellation_code?
     cancellation.error_message == INVALID_CANCELLATION_CODE
+  end
+
+  def cancellation_code
+    if reasons.include?(Cancellation::PRISONER_VOS)
+      NO_VO
+    elsif reasons.include?(Cancellation::PRISONER_CANCELLED)
+      OFFCANC
+    else
+      ADMIN
+    end
+  end
+
+  def reasons
+    visit.cancellation.reasons
   end
 end

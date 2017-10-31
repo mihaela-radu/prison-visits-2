@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe CancelNomisVisit do
-
   let(:visit)                      { create(:booked_visit, nomis_id: 1234) }
   let(:reasons)                    { [Cancellation::PRISONER_RELEASED] }
   let(:expected_cancellation_code) { described_class::ADMIN }
@@ -28,6 +27,7 @@ RSpec.describe CancelNomisVisit do
           cancellation_code: expected_cancellation_code
         )
       }
+
       before do
         expect(Nomis::Api.instance).
           to receive(:cancel_visit).
