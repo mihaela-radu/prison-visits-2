@@ -67,11 +67,13 @@ RSpec.feature 'Cancel a visit booked to NOMIS', js: true do
       end
 
       VCR.use_cassette 'cancel_to_nomis', record: :new_episodes do
+        expect(page).to have_css('.panel.panel-border-narrow', text: 'This booking will automatically be cancelled in NOMIS')
         check 'Prisoner has been released'
         click_button 'Cancel visit'
       end
-      vst.reload
+
       expect(page).to have_content 'The visit has been cancelled'
+      vst.reload
       expect(
         a_request(:patch, "#{Rails.configuration.nomis_api_host}/nomisapi/offenders/1057307/visits/booking/#{vst.nomis_id}/cancel").
           with(body: { comment: nil, cancellation_code: "ADMIN" }.to_json)).to have_been_made.once

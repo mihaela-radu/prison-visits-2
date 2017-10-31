@@ -228,6 +228,7 @@ en:
         issue_with_date: Issue with the date
         visitor_banned: Visitor is banned
         issue_with_visitor: Issue with a visitor
+        cancel_to_nomis_warning: This booking will automatically be cancelled in NOMIS
       other_section:
         title: Other
 
