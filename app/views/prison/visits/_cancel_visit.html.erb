@@ -2,26 +2,28 @@
   <%= f.hidden_field :nomis_cancelled, values: true %>
   <h3 class="heading-medium"><%= t(".title") %></h3>
   <%= error_container(f, :reasons, class: 'form-group') do %>
-  <div class="grid-row">
-    <fieldset>
-      <% f.object.staff_cancellation_reasons.in_groups_of(5, false).each do |reasons| %>
-      <div class="column-one-half">
-        <%= f.collection_check_boxes :reasons, reasons, :id, :label, include_hidden: false do |b| %>
-        <div class="multiple-choice">
-          <%= b.check_box %>
-          <%= b.label %>
-        </div>
+    <div class="grid-row">
+      <fieldset>
+        <% f.object.staff_cancellation_reasons.in_groups_of(5, false).each do |reasons| %>
+          <div class="column-one-half">
+            <%= f.collection_check_boxes :reasons, reasons, :id, :label, include_hidden: false do |b| %>
+              <div class="multiple-choice">
+                <%= b.check_box %>
+                <%= b.label %>
+              </div>
+            <% end %>
+          </div>
         <% end %>
-      </div>
-      <% end %>
-    </fieldset>
-  </div>
+      </fieldset>
+    </div>
   <% end %>
-  <div class="panel panel-border-narrow">
-    <p>
-      <%= t(".cancel_to_nomis_warning")%>
-    </p>
-  </div>
+  <% if Nomis::Feature.book_to_nomis_enabled?(@visit.prison_name) %>
+    <div class="panel panel-border-narrow">
+      <p>
+        <%= t(".cancel_to_nomis_warning")%>
+      </p>
+    </div>
+  <% end %>
   <div class='form-group push-top'>
     <%= submit_tag t('cancel_visit', scope: :shared), class: 'button button-secondary' %>
   </div>
