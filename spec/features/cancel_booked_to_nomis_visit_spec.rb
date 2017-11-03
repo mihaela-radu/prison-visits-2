@@ -120,7 +120,7 @@ RSpec.feature 'Cancel a visit booked to NOMIS', js: true do
       vst.reload
       expect(
         a_request(:patch, "#{Rails.configuration.nomis_api_host}/nomisapi/offenders/1057307/visits/booking/#{vst.nomis_id}/cancel").
-          with(body: { comment: nil, cancellation_code: "ADMIN" }.to_json)).to have_been_made.once
+          with(body: { comment: nil, cancellation_code: "ADMIN" }.to_json)).not_to have_been_made.once
 
     end
 
